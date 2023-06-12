@@ -7,12 +7,14 @@ import './screens.css';
 class Lobby extends react.Component {
     constructor(props) {
         super(props);
-        this.socket = io('http://localhost:3001', {
+        this.socket = io(process.env.REACT_APP_BACKEND_URL, {
             cors: {
-                origin: 'http://localhost:3001',
-                credentials: true
-            }, transports: ['websocket']
-        });
+              origin: process.env.REACT_APP_BACKEND_URL,
+              credentials: true
+            }, 
+            transports: ['websocket']
+          });
+          
         this.state = {
             rooms: undefined,
             room: '',
