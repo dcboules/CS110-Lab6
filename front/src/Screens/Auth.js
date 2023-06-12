@@ -136,9 +136,9 @@ class Auth extends react.Component {
             else if (this.state.selectedForm === "code") {
                 display = (
                     <Form
-                        fields={['Verification Code']}
+                        fields={['verificationCode']}
                         close={this.closeForm}
-                        type="Verification Code..."
+                        type="verificationCode"
                         submit={this.verifyCode}
                         key={this.state.selectedForm}
                     />
