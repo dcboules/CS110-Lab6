@@ -3,14 +3,14 @@ const socket = require('socket.io');
 const http = require('http');
 const cors = require("cors");
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const bodyParser = require('body-parser');
 const auth = require('./routes/auth');
 const rooms = require('./routes/rooms');
 const messages = require('./routes/messages');
-const User = require('./model/user');
-
+const User = require('./model/user');  
 const app = express();
 const server = http.createServer(app);
 
@@ -34,11 +34,21 @@ const database = mongoose.connection;
 database.on('error', (error) => console.error(error));
 database.once('open', () => console.log('Connected to Database'));
 
+const store = new MongoDBStore({
+    uri: process.env.MONGO_URL,
+    collection: 'sessions',
+});
+
+store.on('error', (error) => {
+    console.error('Session store error:', error);
+});
+
 // Set up the session
 const sessionMiddleware = session({
     resave: true, // Whether to save the session to the store on every request
     saveUninitialized: true, // Whether to save uninitialized sessions to the store
     secret: process.env.SESSION_SECRET,
+    store: store, 
 })
 
 app.use(sessionMiddleware);
