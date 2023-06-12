@@ -5,6 +5,9 @@ import Chatroom from "./Screens/Chatroom.js";
 import { Button } from "@mui/material";
 import "./Screens/screens.css";
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const server_url = process.env.REACT_APP_BACKEND_URL;
 
 class ScreenHandler extends react.Component {

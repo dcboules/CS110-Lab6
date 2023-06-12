@@ -3,7 +3,9 @@ import { Button, TextField } from "@mui/material";
 import { io } from 'socket.io-client';
 import DefaultPfp from "./../default-pfp.jpg"
 import './screens.css';
+const dotenv = require("dotenv");
 
+dotenv.config();
 class Lobby extends react.Component {
     constructor(props) {
         super(props);
