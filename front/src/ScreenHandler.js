@@ -5,10 +5,8 @@ import Chatroom from "./Screens/Chatroom.js";
 import { Button } from "@mui/material";
 import "./Screens/screens.css";
 
-const dotenv = require("dotenv");
-dotenv.config();
 
-const server_url = process.env.REACT_APP_BACKEND_URL;
+const server_url = `https://lab-6-arcade-backend.onrender.com;`
 
 class ScreenHandler extends react.Component {
     constructor(props) {

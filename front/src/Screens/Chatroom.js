@@ -9,9 +9,9 @@ dotenv.config();
 class Chatroom extends react.Component {
     constructor(props) {
         super(props);
-        this.socket = io(process.env.REACT_APP_BACKEND_URL, {
+        this.socket = io('https://lab-6-arcade-backend.onrender.com;', {
             cors: {
-              origin: process.env.REACT_APP_BACKEND_URL,
+              origin: 'https://lab-6-arcade-backend.onrender.com;',
               credentials: true
             }, 
             transports: ['websocket']
