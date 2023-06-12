@@ -7,6 +7,13 @@ import { io } from 'socket.io-client';
 class Auth extends react.Component {
     constructor(props) {
         super(props);
+        this.socket = io(process.env.REACT_APP_BACKEND_URL, {
+            cors: {
+              origin: process.env.REACT_APP_BACKEND_URL,
+              credentials: true
+            }, 
+            transports: ['websocket']
+          });
         this.state = {
             showForm: false,
             selectedForm: undefined,

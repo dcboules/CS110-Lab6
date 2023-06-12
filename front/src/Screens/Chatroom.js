@@ -3,13 +3,12 @@ import { io } from 'socket.io-client';
 import DefaultPfp from "./../default-pfp.jpg"
 import './screens.css';
 
-
 class Chatroom extends react.Component {
     constructor(props) {
         super(props);
-        this.socket = io('https://lab-6-arcade-backend.onrender.com;', {
+        this.socket = io(process.env.REACT_APP_BACKEND_URL, {
             cors: {
-              origin: 'https://lab-6-arcade-backend.onrender.com;',
+              origin: process.env.REACT_APP_BACKEND_URL,
               credentials: true
             }, 
             transports: ['websocket']
