@@ -2,9 +2,7 @@ import react from "react";
 import Form from "../Components/form.js";
 import { Button } from "@mui/material";
 import { io } from 'socket.io-client';
-const dotenv = require("dotenv");
 
-dotenv.config();
 
 class Auth extends react.Component {
     constructor(props) {

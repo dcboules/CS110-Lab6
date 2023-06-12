@@ -2,9 +2,7 @@ import react from "react";
 import { io } from 'socket.io-client';
 import DefaultPfp from "./../default-pfp.jpg"
 import './screens.css';
-const dotenv = require("dotenv");
 
-dotenv.config();
 
 class Chatroom extends react.Component {
     constructor(props) {

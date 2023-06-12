@@ -5,7 +5,6 @@ import Chatroom from "./Screens/Chatroom.js";
 import { Button } from "@mui/material";
 import "./Screens/screens.css";
 
-
 const server_url = `https://lab-6-arcade-backend.onrender.com;`
 
 class ScreenHandler extends react.Component {
