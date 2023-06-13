@@ -45,9 +45,9 @@ router.post('/login', async (req, res) => {
         };
         sgMail.send(msg);
         
-        session.authenticated = true;
-        session.userId = user._id;
-        req.user = user;
+        session.user = user;
+        req.session.authenticated = true;
+        req.session.userId = user._id;
 
         const userRooms = await Room.find({ users: user._id })
         user.rooms = userRooms;
