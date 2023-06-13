@@ -53,6 +53,7 @@ router.post('/login', async (req, res) => {
                 console.log(err);
             } else {
                 console.log(user, "in log in this is the user");
+                console.log("**** SESSION AFTER .SAVE() ****", req.session);
                 res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
             }
         });
