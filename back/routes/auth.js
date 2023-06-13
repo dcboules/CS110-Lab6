@@ -48,11 +48,14 @@ router.post('/login', async (req, res) => {
         req.session.authenticated = true;
         req.session.user = user;
         req.session.userId = user._id;
-
-        // const userRooms = await Room.find({ users: user._id })
-        // user.rooms = userRooms;
-        console.log(user, "in log in this is the user");
-        res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
+        req.session.save((err) => {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log(user, "in log in this is the user");
+                res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
+            }
+        });
     }
 });
 
@@ -61,14 +64,11 @@ router.post('/verify', async (req, res) => {
     const { token, user } = req.body;
     console.log("req.session:", req.session);
     console.log("Entered Token:", token);
-    // if (!req.session.user || !req.session.user.email) {
     if (!user || !user.email) {
         return res.json({ msg: "User not found", status: false });
     }
-    // const { email } = req.session.user;
     const email = user.email;
     console.log("Email from session:", email);    
-    // const user = await User.findOne({ email });
     console.log("User from database:", user)
     if (!user) {
         return res.json({ msg: "User not found", status: false });
@@ -86,9 +86,15 @@ router.post('/verify', async (req, res) => {
         req.session.authenticated = true;
         req.session.userId = user._id;
         req.session.user = user;
-        const userRooms = await Room.find({ users: user._id });
-        user.rooms = userRooms;
-        res.json({ msg: "logged in", user: user, status: true });
+        req.session.save(async (err) => {
+            if(err) {
+                console.log(err);
+            } else {
+                const userRooms = await Room.find({ users: user._id });
+                user.rooms = userRooms;
+                res.json({ msg: "logged in", user: user, status: true });
+            }
+        });
     } else {
         return res.json({ msg: "Incorrect Token", status: false });
     }
