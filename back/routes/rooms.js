@@ -7,6 +7,7 @@ const messages = require('../model/messages');
 
 // Get all the rooms
 router.get('/all', async (req, res) => {
+    console.log("User ID making request:", req.session.userId);
     const userRooms = await Room.find({ users: req.session.userId });
     res.send(userRooms);
 });
