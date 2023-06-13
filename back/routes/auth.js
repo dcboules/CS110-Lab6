@@ -45,14 +45,50 @@ router.post('/login', async (req, res) => {
         };
         sgMail.send(msg);
         
-        session.user = user;
         req.session.authenticated = true;
+        req.session.user = user;
         req.session.userId = user._id;
 
         const userRooms = await Room.find({ users: user._id })
         user.rooms = userRooms;
         console.log(user, "in log in this is the user");
         res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
+    }
+});
+
+// route to verify 2fa token:
+router.post('/verify', async (req, res) => {
+    const { token } = req.body;
+    console.log("req.session:", req.session);
+    console.log("Entered Token:", token);
+    if (!req.session.user || !req.session.user.email) {
+        return res.json({ msg: "User not found", status: false });
+    }
+    const { email } = req.session.user;
+    console.log("Email from session:", email);    
+    const user = await User.findOne({ email });
+    console.log("User from database:", user)
+    if (!user) {
+        return res.json({ msg: "User not found", status: false });
+    }
+    const { username } = user;
+    const { session } = req;
+    let tokenIsValid = speakeasy.totp.verify({
+        secret: user.secret,
+        encoding: "base32",
+        token: token,
+        window: 2
+    });
+    console.log("Token validation result:", tokenIsValid);
+    if (tokenIsValid) {
+        req.session.authenticated = true;
+        req.session.userId = user._id;
+        req.session.user = user;
+        const userRooms = await Room.find({ users: user._id });
+        user.rooms = userRooms;
+        res.json({ msg: "logged in", user: user, status: true });
+    } else {
+        return res.json({ msg: "Incorrect Token", status: false });
     }
 });
 
@@ -89,41 +125,6 @@ router.post('/signup', async (req, res) => {
     }
 })
 
-// route to verify 2fa token:
-router.post('/verify', async (req, res) => {
-    const { token } = req.body;
-    console.log("req.session.user:", req.session.user);
-    console.log("Entered Token:", token);
-    if (!req.session.user || !req.session.user.email) {
-        return res.json({ msg: "User not found", status: false });
-    }
-    const { email } = req.session.user.email;
-    console.log("Email from session:", email);
-    const user = await User.findOne({ email });
-    console.log("User from database:", user);
-    if (!user) {
-        return res.json({ msg: "User not found", status: false });
-    }
-    const { username } = user;
-    const { session } = req;
-    let tokenIsValid = speakeasy.totp.verify({
-        secret: user.secret,
-        encoding: "base32",
-        token: token,
-        window: 2
-    });
-    console.log("Token validation result:", tokenIsValid);
-    if (tokenIsValid) {
-        req.session.authenticated = true;
-        req.session.userId = user._id;
-        req.session.user = user;
-        const userRooms = await Room.find({ users: user._id });
-        user.rooms = userRooms;
-        res.json({ msg: "logged in", user: user, status: true });
-    } else {
-        return res.json({ msg: "Incorrect Token", status: false });
-    }
-});
 
 router.post('/editPFP', async (req, res) => {
     const { newProfilePic, username } = req.body;

@@ -61,8 +61,6 @@ app.use(async (req, res, next) => {
         next();
     }
 });
-
-
 app.get('/', (req, res) => {
     if (req.session && req.session.authenticated) {
         res.json({ message: "logged in" });
@@ -72,10 +70,8 @@ app.get('/', (req, res) => {
         console.log("not logged in")
         res.json({ message: "not logged" });
     }
-});
-
+})
 app.use("/api/auth/", auth);
-
 // checking the session before accessing the rooms
 app.use((req, res, next) => {
     if (req.session && req.session.authenticated) {
@@ -84,7 +80,6 @@ app.use((req, res, next) => {
         res.status(401).send("Unauthorized");
     }
 });
-
 app.use("/api/rooms/", rooms);
 app.use("/api/messages/", messages);
 
@@ -107,7 +102,6 @@ io.use((socket, next) => {
         next(new Error("unauthorized"));
     }
 });
-
 // handle socket connections for messaging functionality
 io.on('connection', (socket) => {
     console.log("user connected")
