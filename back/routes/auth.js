@@ -44,7 +44,9 @@ router.post('/login', async (req, res) => {
             html: `<h1>Your 2FA token is: ${token}</h1>`
         };
         sgMail.send(msg);
+        
         session.user = user;
+        req.session.authenticated = true; 
         const userRooms = await Room.find({ users: user._id })
         user.rooms = userRooms;
         console.log(user, "in log in this is the user");
