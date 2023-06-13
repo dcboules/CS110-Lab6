@@ -49,8 +49,8 @@ router.post('/login', async (req, res) => {
         req.session.user = user;
         req.session.userId = user._id;
 
-        const userRooms = await Room.find({ users: user._id })
-        user.rooms = userRooms;
+        // const userRooms = await Room.find({ users: user._id })
+        // user.rooms = userRooms;
         console.log(user, "in log in this is the user");
         res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
     }
@@ -58,15 +58,16 @@ router.post('/login', async (req, res) => {
 
 // route to verify 2fa token:
 router.post('/verify', async (req, res) => {
-    const { token } = req.body;
+    const { token, user } = req.body;
     console.log("req.session:", req.session);
     console.log("Entered Token:", token);
     if (!req.session.user || !req.session.user.email) {
         return res.json({ msg: "User not found", status: false });
     }
-    const { email } = req.session.user;
+    // const { email } = req.session.user;
+    const email = user.email;
     console.log("Email from session:", email);    
-    const user = await User.findOne({ email });
+    // const user = await User.findOne({ email });
     console.log("User from database:", user)
     if (!user) {
         return res.json({ msg: "User not found", status: false });

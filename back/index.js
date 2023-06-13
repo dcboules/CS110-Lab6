@@ -48,7 +48,10 @@ const sessionMiddleware = session({
     resave: true, // Whether to save the session to the store on every request
     saveUninitialized: true, // Whether to save uninitialized sessions to the store
     secret: process.env.SESSION_SECRET,
-    store: store, 
+    store: store,
+    cookie: {
+        maxAge: 60000
+    }
 })
 
 app.use(sessionMiddleware);

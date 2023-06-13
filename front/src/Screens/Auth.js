@@ -42,10 +42,15 @@ class Auth extends react.Component {
             return res.json();
         }).then((data) => {
             console.log(data);
+            // data.user needs to be saved for the session & Verify
             if (data.msg === "logged in") {
                 if (this.state.tokenRequired) {
                     console.log(data.tokenRequired, "token in log in")
-                    this.setState({ showForm: true, selectedForm: "code" });
+                    this.setState({ 
+                        showForm: true, 
+                        selectedForm: "code", 
+                        user: data.user 
+                    });
                 } else {
                     console.log(data.user, "in login")
                     this.setState({ showForm: false });
@@ -95,7 +100,7 @@ class Auth extends react.Component {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({ token }),
+            body: JSON.stringify({ token, user: this.state.user }),
         }).then((res) => {
             if (!res.ok) {
                 throw new Error('Request failed with status: ' + res.status);
