@@ -61,7 +61,8 @@ router.post('/verify', async (req, res) => {
     const { token, user } = req.body;
     console.log("req.session:", req.session);
     console.log("Entered Token:", token);
-    if (!req.session.user || !req.session.user.email) {
+    // if (!req.session.user || !req.session.user.email) {
+    if (!user || !user.email) {
         return res.json({ msg: "User not found", status: false });
     }
     // const { email } = req.session.user;
